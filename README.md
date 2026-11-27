@@ -12,7 +12,7 @@ A cassette-inspired study timer with a real-time tuition clock.
 ![Calendar](https://img.shields.io/badge/XJTLU-2026%E2%80%932027-8fc7b5?style=flat-square)
 ![Local first](https://img.shields.io/badge/Data-Local_first-203a4b?style=flat-square)
 
-[在线体验](https://xjtlu-study-tuition-clock.molin4896.chatgpt.site) · [计费规则](#学费如何计时) · [本地运行](#本地运行) · [校历原件](dist/assets/academic-calendar-2026-27.pdf)
+[在线体验](https://aries444444.github.io/XJTLU-StudyTape/) · [计费规则](#学费如何计时) · [本地运行](#本地运行) · [校历原件](dist/assets/academic-calendar-2026-27.pdf)
 
 </div>
 
@@ -78,7 +78,7 @@ Study Tape 是一个为西浦学习生活设计的专注计时器。复古磁带
 
 ## 开始使用
 
-1. 打开[在线网站](https://xjtlu-study-tuition-clock.molin4896.chatgpt.site)。
+1. 打开[在线网站](https://aries444444.github.io/XJTLU-StudyTape/)。
 2. 在设置中选择年学费，确认学年日期范围。
 3. 开始一段专注，或切换到校历查看计费日期。
 4. 在记录页面回顾学习时间，需要时导出 CSV。
