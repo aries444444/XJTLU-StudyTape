@@ -1,0 +1,477 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#fafaf6" />
+    <meta
+      name="description"
+      content="西浦专注计时器与学费时钟。按学年校历换算时间价值，记录每一次自习。"
+    />
+    <title>学时 · 专注随身听</title>
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+    <link
+      rel="preload"
+      href="assets/barlow-medium.ttf"
+      as="font"
+      type="font/ttf"
+      crossorigin
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" class="sprite">
+      <defs>
+        <symbol id="i-sliders" viewBox="0 0 24 24">
+          <path d="M3 7h9m4 0h5M3 17h3m4 0h11" />
+          <circle cx="14" cy="7" r="2" />
+          <circle cx="8" cy="17" r="2" />
+        </symbol>
+        <symbol id="i-expand" viewBox="0 0 24 24">
+          <path d="M4 9V4h5m6 0h5v5M4 15v5h5m6 0h5v-5" />
+        </symbol>
+        <symbol id="i-reset" viewBox="0 0 24 24">
+          <path d="M4 9a8 8 0 1 1 0 6M4 4v5h5" />
+        </symbol>
+        <symbol id="i-date" viewBox="0 0 24 24">
+          <rect x="3" y="5" width="18" height="16" rx="2" />
+          <path d="M7 3v4m10-4v4M3 10h18" />
+        </symbol>
+        <symbol id="i-pencil" viewBox="0 0 24 24">
+          <path d="m4 15 11-11 4 4L8 19l-5 1zM13 6l4 4" />
+        </symbol>
+        <symbol id="i-tape" viewBox="0 0 24 24">
+          <rect x="2" y="5" width="20" height="14" rx="2" />
+          <path d="m6 19 2-4h8l2 4" />
+          <circle cx="8" cy="10" r="2" />
+          <circle cx="16" cy="10" r="2" />
+        </symbol>
+        <symbol id="i-stop" viewBox="0 0 24 24">
+          <rect
+            x="6"
+            y="6"
+            width="12"
+            height="12"
+            rx="1"
+            fill="currentColor"
+            stroke="none"
+          />
+        </symbol>
+        <symbol id="i-close" viewBox="0 0 24 24">
+          <path d="m6 6 12 12M18 6 6 18" />
+        </symbol>
+        <symbol id="i-download" viewBox="0 0 24 24">
+          <path d="M12 3v11m-4-4 4 4 4-4M4 16v4h16v-4" />
+        </symbol>
+        <symbol id="i-clock" viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="9" />
+          <path d="M12 6v6l4 2" />
+        </symbol>
+      </defs>
+    </svg>
+    <a class="skip" href="#main">跳到主要内容</a>
+    <header class="masthead">
+      <div class="header-inner">
+        <a href="#timer" class="brand" aria-label="学时首页"
+          ><span class="brand-mark"
+            ><svg class="ico" aria-hidden="true" viewBox="0 0 24 24">
+              <use href="#i-tape"></use></svg></span
+          ><b>学时</b><i lang="en">Study Tape</i></a
+        >
+        <nav aria-label="主导航">
+          <a class="nav-item" href="#timer" data-view="timer">专注台</a
+          ><a class="nav-item" href="#calendar" data-view="calendar">学年校历</a
+          ><a class="nav-item" href="#history" data-view="history">专注记录</a>
+        </nav>
+        <button class="settings-open settings-btn" aria-label="学费与偏好设置">
+          <svg class="ico" aria-hidden="true" viewBox="0 0 24 24">
+            <use href="#i-sliders"></use></svg
+          ><span>设置</span>
+        </button>
+      </div>
+    </header>
+    <main id="main" tabindex="-1">
+      <div class="page-heading">
+        <h1 id="page-title">专注随身听</h1>
+        <div class="dayline">
+          <svg class="ico" aria-hidden="true" viewBox="0 0 24 24">
+            <use href="#i-date"></use></svg
+          ><time id="current-date"></time>
+        </div>
+      </div>
+      <div id="timer-view" class="view-panel">
+        <section class="focus-card" aria-label="专注播放器">
+          <div class="stage">
+            <div class="deck-label" role="status">
+              <i class="lamp"></i><span id="timer-status">待机</span>
+            </div>
+            <div class="tape-art" aria-hidden="true">
+              <canvas id="cassette" width="1100" height="700"></canvas>
+            </div>
+            <div class="stage-caption">
+              <span>本次专注价值</span
+              ><strong id="session-cost">¥0.0000</strong>
+            </div>
+          </div>
+          <div class="transport">
+            <div class="transport-head">
+              <div class="mode-tabs" role="group" aria-label="计时模式">
+                <button data-mode="focus">番茄专注</button
+                ><button data-mode="stopwatch">正向计时</button>
+              </div>
+              <button
+                id="fullscreen"
+                class="icon-button"
+                title="全屏专注"
+                aria-label="全屏专注"
+              >
+                <svg class="ico" aria-hidden="true" viewBox="0 0 24 24">
+                  <use href="#i-expand"></use>
+                </svg>
+              </button>
+            </div>
+            <div class="readout">
+              <div
+                id="timer-digits"
+                role="timer"
+                aria-live="off"
+                aria-label="剩余时间"
+              >
+                25:00
+              </div>
+            </div>
+            <div
+              class="duration-options"
+              id="duration-options"
+              role="group"
+              aria-label="专注时长"
+            >
+              <button data-minutes="25">25 分钟</button
+              ><button data-minutes="50">50 分钟</button
+              ><button id="custom-duration">自定义</button>
+            </div>
+            <div class="transport-bottom">
+              <label class="task-input"
+                ><svg class="ico" aria-hidden="true" viewBox="0 0 24 24">
+                  <use href="#i-pencil"></use></svg
+                ><input
+                  id="task-name"
+                  name="task"
+                  autocomplete="off"
+                  maxlength="80"
+                  placeholder="写下本次任务（选填）"
+                  aria-label="本次专注任务（选填）"
+              /></label>
+              <div class="timer-controls">
+                <button id="start-timer" class="primary-button">
+                  <i id="play-icon" aria-hidden="true"></i
+                  ><span id="start-label">开始专注</span></button
+                ><button
+                  id="reset-timer"
+                  class="ctrl"
+                  title="重置计时"
+                  aria-label="重置计时"
+                >
+                  <svg class="ico" aria-hidden="true" viewBox="0 0 24 24">
+                    <use href="#i-reset"></use>
+                  </svg></button
+                ><button
+                  id="finish-timer"
+                  class="ctrl"
+                  title="结束并保存"
+                  aria-label="结束并保存"
+                  disabled
+                >
+                  <svg class="ico" aria-hidden="true" viewBox="0 0 24 24">
+                    <use href="#i-stop"></use></svg
+                  ><span>结束并保存</span>
+                </button>
+              </div>
+              <span id="session-estimate" class="estimate"></span>
+            </div>
+          </div>
+        </section>
+        <div class="ledger-layout">
+          <section class="tuition" aria-labelledby="tuition-title">
+            <div class="section-head">
+              <h2 id="tuition-title">学费时钟</h2>
+              <button class="text-button settings-open">
+                <svg class="ico" aria-hidden="true" viewBox="0 0 24 24">
+                  <use href="#i-sliders"></use></svg
+                >调整学费
+              </button>
+            </div>
+            <div class="balance-label">
+              本学年剩余学费
+              <span class="billing-state"
+                ><i class="live-dot"></i><span id="annual-status"></span
+              ></span>
+            </div>
+            <div class="money">
+              <span class="currency">¥</span><span id="remaining-int">—</span
+              ><span id="remaining-decimal">.0000</span>
+            </div>
+            <div class="meter-line">
+              <div class="progress-track">
+                <div id="year-progress-bar"></div>
+              </div>
+              <b id="year-percent">0%</b>
+            </div>
+            <div class="progress-labels">
+              <span id="date-range"></span
+              ><span>剩余 <b id="days-left"></b> 个在校日</span>
+            </div>
+            <dl class="annual-summary">
+              <div>
+                <dt>学年总额</dt>
+                <dd id="total-tuition">—</dd>
+              </div>
+              <div>
+                <dt>累计已流逝</dt>
+                <dd id="spent-tuition">—</dd>
+              </div>
+              <div>
+                <dt>今日已流逝</dt>
+                <dd id="today-tuition">—</dd>
+              </div>
+            </dl>
+            <p class="burn-rate">
+              ¥<b id="rate-second"></b> / 秒<span id="billing-caption"></span>
+            </p>
+          </section>
+          <div class="side-notes">
+            <section class="today">
+              <div class="section-head">
+                <h2>今日专注</h2>
+                <svg class="ico" aria-hidden="true" viewBox="0 0 24 24">
+                  <use href="#i-tape"></use>
+                </svg>
+              </div>
+              <div class="today-main">
+                <strong id="today-focus">0</strong><span>分钟</span>
+              </div>
+              <div class="today-meta">
+                <span>已完成 <b id="today-sessions">0</b> 次</span
+                ><span>时间价值 <b id="today-worth">¥0.00</b></span>
+              </div>
+            </section>
+            <section class="term">
+              <div class="term-top">
+                <span id="term-chip"></span
+                ><a href="#calendar" class="text-button">查看校历</a>
+              </div>
+              <h3 id="academic-title"></h3>
+              <p>
+                <span id="next-event-date"></span>
+                <span id="next-event-title"></span
+                ><small id="next-event-days"></small>
+              </p>
+            </section>
+          </div>
+        </div>
+        <section class="recent-section">
+          <div class="section-head">
+            <h2>最近的专注</h2>
+            <a href="#history" class="text-button">查看全部</a>
+          </div>
+          <div id="recent-records"></div>
+        </section>
+      </div>
+      <section id="calendar-view" class="view-panel" hidden>
+        <div class="view-toolbar">
+          <p>西交利物浦大学　2026 / 27 学年</p>
+          <a
+            href="assets/academic-calendar-2026-27.pdf"
+            target="_blank"
+            rel="noopener"
+            class="outline-button"
+            >打开校历 PDF</a
+          >
+        </div>
+        <div class="calendar-navigation">
+          <div class="calendar-mode" role="group" aria-label="校历视图">
+            <button id="view-month" aria-pressed="true">月历</button
+            ><button id="view-year" aria-pressed="false">全年总览</button>
+          </div>
+          <div id="month-controls">
+            <button id="prev-month" class="month-step">上月</button
+            ><select
+              id="month-picker"
+              name="month"
+              aria-label="查看月份"
+            ></select
+            ><button id="next-month" class="month-step">下月</button>
+          </div>
+        </div>
+        <div class="legend">
+          <span><i class="teaching"></i>教学</span
+          ><span><i class="reading"></i>复习</span
+          ><span><i class="exam"></i>考试</span
+          ><span><i class="holiday"></i>假期及关闭日</span>
+        </div>
+        <div id="calendar-layout" class="calendar-layout">
+          <div id="calendar-months" class="calendar-months"></div>
+          <aside id="month-agenda" aria-label="日期与月度安排">
+            <div class="selected-date" aria-live="polite">
+              <span id="selected-month"></span
+              ><strong id="selected-day"></strong
+              ><span id="selected-phase"></span><b id="selected-billing"></b>
+            </div>
+            <section class="month-agenda">
+              <h3>本月安排</h3>
+              <ul id="month-events"></ul>
+              <p id="month-day-count"></p>
+            </section>
+          </aside>
+        </div>
+        <details class="source-note">
+          <summary>校历与学费如何对应？</summary>
+          <p>
+            默认计费区间为 2026 年 9 月 7 日至 2027 年 6 月 11 日，共 157
+            个在校工作日。仅计教学、复习及考试日，跳过周末、假期、关闭日、迎新与冬夏学校。毕业典礼日依其所在阶段计费。若需纳入补考复习及补考，可在设置中将结束日期延长至
+            2027 年 8 月 6 日。
+          </p>
+        </details>
+      </section>
+      <section id="history-view" class="view-panel" hidden>
+        <div class="view-toolbar">
+          <p>记录保存在当前浏览器，可导出备份。</p>
+          <button id="export-records" class="outline-button">
+            <svg class="ico" aria-hidden="true" viewBox="0 0 24 24">
+              <use href="#i-download"></use></svg
+            >导出 CSV
+          </button>
+        </div>
+        <dl class="history-stats">
+          <div>
+            <dt>累计专注</dt>
+            <dd id="all-minutes"></dd>
+          </div>
+          <div>
+            <dt>完成次数</dt>
+            <dd id="all-count"></dd>
+          </div>
+          <div>
+            <dt>累计时间价值</dt>
+            <dd id="all-worth"></dd>
+          </div>
+        </dl>
+        <div id="all-records"></div>
+      </section>
+    </main>
+    <footer>
+      <div>
+        <span>学时 <i lang="en">Study Tape</i></span
+        ><span>按西浦校历估算学费时间价值 · 北京时间</span>
+      </div>
+    </footer>
+    <dialog id="settings-dialog" aria-labelledby="settings-title">
+      <form id="settings-form">
+        <div class="dialog-heading">
+          <h2 id="settings-title">学费设置</h2>
+          <button
+            type="button"
+            class="dialog-close icon-button"
+            aria-label="关闭设置"
+          >
+            <svg class="ico" aria-hidden="true" viewBox="0 0 24 24">
+              <use href="#i-close"></use>
+            </svg>
+          </button>
+        </div>
+        <fieldset class="tuition-choice">
+          <legend>每学年学费</legend>
+          <div class="tuition-options">
+            <label><input type="radio" name="tuition-option" value="93000"><span>¥93,000</span></label>
+            <label><input type="radio" name="tuition-option" value="99000"><span>¥99,000</span></label>
+            <label><input type="radio" name="tuition-option" value="custom"><span>自定义金额</span></label>
+          </div>
+        </fieldset>
+        <label id="custom-tuition-field" class="form-field" hidden>自定义年学费（人民币元）
+          <input id="tuition-input" name="tuition" type="number" inputmode="decimal" min="0" max="10000000" step="0.01" placeholder="输入你的年学费" disabled>
+        </label>
+        <p class="source-detail">选择一个金额，或填写自己的实际年学费。金额仅用于计算时间成本，可随时修改。</p>
+        <div class="date-fields">
+          <label class="form-field"
+            >开始日期<input
+              id="start-input"
+              name="start"
+              type="date"
+              min="2026-08-31"
+              max="2027-09-05"
+              required /></label
+          ><label class="form-field"
+            >结束日期（含当天）<input
+              id="end-input"
+              name="end"
+              type="date"
+              min="2026-08-31"
+              max="2027-09-05"
+              required
+          /></label>
+        </div>
+        <div class="formula-note">
+          每秒费率 = 年学费 ÷ 在校计费日数 ÷
+          86,400。按北京时间计算，跳过周末、假期及关闭日。<strong
+            id="settings-summary"
+          ></strong>
+        </div>
+        <p id="settings-error" class="form-error" role="alert"></p>
+        <button class="primary-button save-settings" type="submit">
+          保存设置
+        </button>
+      </form>
+    </dialog>
+    <dialog id="duration-dialog" aria-labelledby="duration-title">
+      <form id="duration-form">
+        <div class="dialog-heading">
+          <h2 id="duration-title">自定义专注时长</h2>
+          <button
+            type="button"
+            class="dialog-close icon-button"
+            aria-label="关闭"
+          >
+            <svg class="ico" aria-hidden="true" viewBox="0 0 24 24">
+              <use href="#i-close"></use>
+            </svg>
+          </button>
+        </div>
+        <label class="form-field"
+          >时长（1 至 480 分钟）<input
+            id="custom-minutes"
+            name="minutes"
+            type="number"
+            inputmode="numeric"
+            value="45"
+            min="1"
+            max="480"
+            step="1"
+            required /></label
+        ><button class="primary-button save-settings" type="submit">
+          设置时长
+        </button>
+      </form>
+    </dialog>
+    <dialog id="reset-dialog" aria-labelledby="reset-title">
+      <div class="dialog-heading"><h2 id="reset-title">重置本次计时？</h2></div>
+      <p>本次尚未保存的专注将被清除。若要保留，请返回并选择「结束并保存」。</p>
+      <div class="confirm-buttons">
+        <button class="outline-button dialog-close">返回计时</button
+        ><button class="primary-button" id="confirm-reset">重置计时</button>
+      </div>
+    </dialog>
+    <dialog id="day-dialog" aria-labelledby="day-title">
+      <div class="dialog-heading">
+        <h2 id="day-title"></h2>
+        <button class="dialog-close icon-button" aria-label="关闭日期详情">
+          <svg class="ico" aria-hidden="true" viewBox="0 0 24 24">
+            <use href="#i-close"></use>
+          </svg>
+        </button>
+      </div>
+      <p id="day-detail"></p>
+    </dialog>
+    <div id="toast" class="toast" role="status" hidden></div>
+    <script type="module" src="app.js"></script>
+  </body>
+</html>
