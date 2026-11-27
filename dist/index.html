@@ -191,6 +191,22 @@
             </div>
           </div>
         </section>
+        <section class="sound-panel" id="sound-panel" aria-labelledby="sound-title">
+          <div class="sound-heading">
+            <span class="sound-symbol" aria-hidden="true">♫</span>
+            <div><h2 id="sound-title">专注声音</h2><p id="sound-status" role="status">声音已关闭</p></div>
+          </div>
+          <div class="sound-controls">
+            <select id="sound-track" aria-label="选择专注声音">
+              <option value="rain">窗边细雨</option>
+              <option value="brook">林间溪流</option>
+              <option value="pad">柔和氛围</option>
+            </select>
+            <button id="sound-toggle" class="outline-button" aria-pressed="false">开启声音</button>
+            <label class="sound-volume">音量 <input id="sound-volume" type="range" min="0" max="100" value="25" aria-label="声音音量"><output id="sound-volume-value" for="sound-volume">25%</output></label>
+            <label class="sound-follow"><input id="sound-follow" type="checkbox">随专注启停</label>
+          </div>
+        </section>
         <div class="ledger-layout">
           <section class="tuition" aria-labelledby="tuition-title">
             <div class="section-head">
@@ -390,7 +406,7 @@
         <label id="custom-tuition-field" class="form-field" hidden>自定义年学费（人民币元）
           <input id="tuition-input" name="tuition" type="number" inputmode="decimal" min="0" max="10000000" step="0.01" placeholder="输入你的年学费" disabled>
         </label>
-        <p class="source-detail">选择一个金额，或填写自己的实际年学费。金额仅用于计算时间成本，可随时修改。</p>
+        <p class="source-detail">选择一个金额，或填写自己的实际年学费，可随时修改。</p>
         <div class="date-fields">
           <label class="form-field"
             >开始日期<input

@@ -15,6 +15,8 @@ import {
   validSettings,
 } from "./core.js";
 import { updateCassette } from "./cassette.js";
+import { initAmbient } from "./ambient.js";
+const ambient = initAmbient();
 const $ = (s) => document.querySelector(s),
   $$ = (s) => [...document.querySelectorAll(s)];
 const KEY = "study-worth-campus-v2";
@@ -106,6 +108,7 @@ function resetTimer(
 function syncControls() {
   const t = state.timer,
     active = t.startedAt !== null || t.elapsed > 0;
+  ambient.setRunning(t.startedAt !== null);
   $$(".mode-tabs button").forEach((b) => {
     b.classList.toggle("selected", b.dataset.mode === t.mode);
     b.disabled = active;

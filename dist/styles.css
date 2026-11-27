@@ -19,6 +19,22 @@
   font: 100%/1.5 var(--body);
   font-synthesis: weight;
 }
+.sound-panel { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 22px 26px; margin: 20px 0 32px; border: 1px solid var(--line); border-radius: 16px; background: #eef2eb; }
+.sound-heading { display: flex; align-items: center; gap: 14px; flex-shrink: 0; }
+.sound-heading h2 { font-size: 1rem; font-weight: 600; }
+.sound-heading p { font-size: .875rem; color: var(--muted); margin-top: 3px; }
+.sound-symbol { display: grid; place-items: center; width: 42px; height: 42px; border-radius: 50%; background: #dce8df; color: var(--ink); font-size: 1.5rem; }
+.sound-active .sound-symbol { background: var(--ink); color: #dce8df; }
+.sound-controls { display: flex; align-items: center; flex-wrap: wrap; gap: 16px; }
+.sound-controls select { font: inherit; color: var(--ink); background: var(--paper); padding: 10px 30px 10px 12px; border: 1px solid var(--line); border-radius: 8px; }
+.sound-controls .outline-button { min-height: 44px; font-size: .875rem; }
+.sound-volume { display: flex; align-items: center; gap: 8px; font-size: .875rem; }
+.sound-volume input { width: 90px; accent-color: var(--ink); }
+.sound-volume output { min-width: 36px; font-variant-numeric: tabular-nums; }
+.sound-follow { display: flex; align-items: center; gap: 7px; font-size: .875rem; cursor: pointer; }
+.sound-follow input { width: 16px; height: 16px; accent-color: var(--ink); }
+@media (max-width: 1050px) { .sound-panel { align-items: flex-start; flex-direction: column; } }
+@media (max-width: 540px) { .sound-panel { padding: 18px; } .sound-controls { width: 100%; gap: 14px; } .sound-controls select { flex: 1; } .sound-volume { flex-basis: 100%; } .sound-volume input { flex: 1; } }
 * {
   box-sizing: border-box;
 }
